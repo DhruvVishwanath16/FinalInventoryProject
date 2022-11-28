@@ -1,0 +1,45 @@
+#Author: Grant Shaffer & Dhruv Vishwanath
+#Assignment: Inventory class
+#Date: 11/28/22
+#Program Description: Inventory class for final project
+
+
+class Inventory:
+    def __init__(self, new_id, new_name, new_stock, new_price):
+        self.__id = new_id
+        self.__name = new_name
+        self.__stock = new_stock
+        self.__price = new_price
+   
+#Accessors for each of the different attributes
+    def get_id(self):
+        return self.__id
+    
+    def get_name(self):
+        return self.__name
+    
+    def get_stock(self):
+        return self.__stock
+    
+    def get_price(self):
+        return self.__price
+    
+#This method checks whethr the new stock is negative which means it is being restocked. It then adds the amount to be restocked
+    def restock(self, new_stock):
+        if new_stock < 0:
+            self.__stock = (new_stock * -1) + self.__stock
+            return True
+        else:
+            return False
+       
+#This method is used to make sure the purhcase quanitty is less than or equal to the current stock availability
+    def purchase(self, purch_qty):
+        if purch_qty > 0 and purch_qty <= self.__stock:
+            self.__stock = self.__stock - purch_qty
+            return True
+        else:
+            return False
+    
+        
+    def __str__(self):
+        return format(self.__id, '')
