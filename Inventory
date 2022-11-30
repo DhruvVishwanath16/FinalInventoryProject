@@ -42,4 +42,9 @@ class Inventory:
     
         
     def __str__(self):
-        return format(self.__id, '')
+        return self.__id + '\t' + format(self.__name) + '\t\t\t\t' + format(self.__price, '.2f') + '\t' + str(format(self.__stock, '.1f'))
+    
+        
+    
+
+
