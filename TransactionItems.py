@@ -46,6 +46,9 @@ class TransactionItem:
         return cost
     
     def __str__(self):
+        transaction_cost = format(self.calc_cost, '.2f')
+        string = str(self.__id) + ' ' + str(self.__name) + ' ' + str(self.__qty) + ' ' + str(self.__price) + ' $' + str(transaction_cost)
+        return string
         
         
     
