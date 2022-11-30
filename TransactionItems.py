@@ -1,3 +1,8 @@
+#Author: Grant Shaffer & Dhruv Vishwanath
+#Assignment: TransactionItems class
+#Date: 11/28/22
+#Program Description: TransactionItems class for final project
+
 class TransactionItem:
     
     
