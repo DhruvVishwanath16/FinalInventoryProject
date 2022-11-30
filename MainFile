@@ -1,0 +1,45 @@
+#Author: Grant Shaffer & Dhruv Vishwanath
+#Assignment: Final project main
+#Date: 11/28/22
+#Program Description: Main file for final project
+
+#import TransactionItem
+import Inventory
+
+def process_inventory():
+    inventory_data = open('Inventory.txt','r')
+    dict_names = []
+    dict_qty = []
+    dict_prices = []
+    list_products = []
+    for line in inventory_data:
+        line = line.rstrip('\n')
+        inventory_list = line.split(';')
+        
+        prod_id = inventory_list[0]
+        prod_name = inventory_list[1]
+        prod_qty = inventory_list[2]
+        prod_price = inventory_list[3]
+        
+        dict_names[prod_id] = prod_name
+        dict_qty[prod_id] = prod_qty
+        dict_prices[prod_id] = prod_price
+        
+        list_products.append(Inventory.Inventory(prod_id, prod_name, prod_qty, prod_price))
+    inventory_data.close()
+#After this, don't need to modify file
+
+
+
+
+
+
+
+
+
+
+
+
+
+def main():
+    process_inventory()
