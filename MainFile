@@ -3,43 +3,95 @@
 #Date: 11/28/22
 #Program Description: Main file for final project
 
-import TransactionItem
-import Inventory
+import transactionitem
+import inventory
 
 def process_inventory():
     inventory_data = open('Inventory.txt','r')
-    dict_names = []
-    dict_qty = []
-    dict_prices = []
+    prod_id = inventory_data.readline().rstrip('\n')
     list_products = []
-    for line in inventory_data:
-        line = line.rstrip('\n')
-        inventory_list = line.split(';')
+    while prod_id != '':
+        prod_name = inventory_data.readline().rstrip('n')
+        prod_qty = inventory_data.readline().rstrip('n')
+        prod_price = inventory_data.readline().rstrip('n')
         
-        prod_id = inventory_list[0]
-        prod_name = inventory_list[1]
-        prod_qty = inventory_list[2]
-        prod_price = inventory_list[3]
+        inv = inventory.Inventory
+        prod = inv(int(prod_id), prod_name, int(prod_qty), float(prod_price))
         
-        dict_names[prod_id] = prod_name
-        dict_qty[prod_id] = prod_qty
-        dict_prices[prod_id] = prod_price
-        
-        list_products.append(Inventory.Inventory(prod_id, prod_name, prod_qty, prod_price))
+        list_products.append(prod)
+        prod_id = inventory_data.readline().rstrip('n')
+    return list_products
     inventory_data.close()
-#After this, don't need to modify file
 
 
+def print_inventory(list_products):
+    print('ID \t\t Item \t\t\t\t\t Price \t Stock')
+    for prod in list_products:
+        print(prod)
+    print('Enter 0 when finished. \n')
+   
+    
+def get_item_id(list_products):
+    action = 0
+    while action == 0:
+        id_input = input('Please enter the item ID you wish to purchase/return: ')
+        try:
+            id_input = int(id_input)
+        except:
+            print('Input was invalied.')
+        if id_input == 0:
+            action = 1
+        else:
+            for prod in list_products:
+                if prod.get_item_id() == id_input:
+                    action = 1
+            if action == 0:
+                print('Input was invalid.')
+    return id_input
 
 
-
-
-
-
-
-
-
-
-
+def updated_inventory(list_products):
+    updated_inv_txt = open('Updated_Inventory.txt', 'w')
+    for prod in list_products:
+        updated_inv_txt.write(str(prod.get_item_id()) + '\n')
+        updated_inv_txt.write(str(prod.get_name()) + '\n')
+        updated_inv_txt.write(str(prod.get_stock()) + '\n')
+        updated_inv_txt.write(str(prod.get_price()) + '\n')
+        
+        
+def print_invoice(customer_list):
+    item_total = 0
+    subtotal = 0
+    
+    for prod in customer_list:
+        item_total = item_total + prod.get_qty()
+        subtotal = subtotal + prod.calc_cost
+        
+    if prod != 0:
+        print('\nID \t\t Item \t\t\t\t\t Price \t Stock')
+        for prod in customer_list:
+            print(prod)
+        tax = subtotal * 0.085
+        total = subtotal + tax
+        print('\nPrice: $' + format(subtotal, '.2f'), sep = '')
+        print('Tax: $' + format(tax, '.2f'), sep = '')
+        print('Total: $' + format(total, '.2f'), sep = '')
+        
 def main():
-    process_inventory()
+    list_products = process_inventory()
+    customer_list = []
+    action = 0
+    while action == 0:
+        print_inventory()
+        id_input = get_item_id(list_products)
+        qty_action = 0
+        if id_input == 0:
+            qty_action = 0
+            action = 1
+        while qty_action == 0:
+            qty_input = input('Please enter the desired quantity (negative quantity for returns): ')
+            try:
+                qty_input = int(qty_input)
+                for prod in list_products:
+                    if prod.get_item_id() == id_input:
+                        if qty_input > 0:
