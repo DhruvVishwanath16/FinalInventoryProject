@@ -3,8 +3,9 @@
 #Date: 11/28/22
 #Program Description: Main file for final project
 
-import transactionitem
-import inventory
+import TransactionItem
+import Inventory
+
 
 def process_inventory():
     inventory_data = open('Inventory.txt','r')
@@ -15,7 +16,7 @@ def process_inventory():
         prod_qty = inventory_data.readline().rstrip('n')
         prod_price = inventory_data.readline().rstrip('n')
         
-        inv = inventory.Inventory
+        inv = Inventory.Inventory
         prod = inv(int(prod_id), prod_name, int(prod_qty), float(prod_price))
         
         list_products.append(prod)
@@ -82,16 +83,31 @@ def main():
     customer_list = []
     action = 0
     while action == 0:
-        print_inventory()
+        print_inventory(list_products)
         id_input = get_item_id(list_products)
         qty_action = 0
         if id_input == 0:
-            qty_action = 0
+            qty_action = 1
             action = 1
         while qty_action == 0:
-            qty_input = input('Please enter the desired quantity (negative quantity for returns): ')
+            qty_purch = input('Please enter the desired quantity (negative quantity for returns): ')
             try:
-                qty_input = int(qty_input)
+                qty_purch = int(qty_purch)
                 for prod in list_products:
                     if prod.get_item_id() == id_input:
-                        if qty_input > 0:
+                        if qty_purch > 0:
+                            qty_action = prod.purchase(qty_purch)
+                        else:
+                            qty_action = prod.restock(qty_purch)
+                        if qty_action == 0:
+                            transaction = TransactionItem.TransactionItem
+                            prod_transaction = transaction(prod.get_item_id(), prod.get_name(), qty_purch, prod.get_price())
+                            prod_transaction.get_item_id()
+                            customer_list.append(prod_transaction)
+            except:
+                print('Sorry, we do not have enough stock.')
+                print_inventory(list_products)
+    print_invoice(customer_list)
+    updated_inventory(list_products)
+  
+main()
