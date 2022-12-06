@@ -6,11 +6,11 @@
 class TransactionItem:
     
 # Initializes the variables for the class
-    def __init__(self):
-        self.__id = 0
-        self.__name = ''
-        self.__qty = 0
-        self.__price = 0
+    def __init__(self, new_id, new_name, new_qty, new_price):
+        self.__id = new_id
+        self.__name = new_name
+        self.__qty = new_qty
+        self.__price = new_price
     
 # Accessor to get the id for the item
     def get_id(self):
@@ -47,11 +47,11 @@ class TransactionItem:
         
 # Function to calculate the cost of the item
     def calc_cost(self):
-        cost = self.__qty*self.__cost
-        return cost
+        transaction_cost = self.__qty * self.__price
+        return transaction_cost
+    
 # Returns the invoice for the item
     def __str__(self):
-        transaction_cost = format(self.calc_cost, '.2f')
+        transaction_cost = self.calc_cost()
         string = str(self.__id) + ' ' + str(self.__name) + ' ' + str(self.__qty) + ' ' + str(self.__price) + ' $' + str(transaction_cost)
         return string
-          
