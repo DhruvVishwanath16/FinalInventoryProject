@@ -1,116 +1,125 @@
-#Author: Grant Shaffer & Dhruv Vishwanath
-#Assignment: Final project main
-#Date: 11/28/22
-#Program Description: Main file for final project
+#Author: Group 6 - Matthew Chen (mac22534) and Kyra Burke (ktb793)
+#Homework number and name: Final Project 
+#Due Date: May 14th, 2021
+#Program Description: Creating a program that manages inventory 
 
-import TransactionItem
-import Inventory
-
+import inventory
+import transactionitem
 
 def process_inventory():
-    inventory_data = open('Inventory.txt','r')
-    prod_id = inventory_data.readline().rstrip('\n')
-    list_products = []
-    while prod_id != '':
-        prod_name = inventory_data.readline().rstrip('n')
-        prod_qty = inventory_data.readline().rstrip('n')
-        prod_price = inventory_data.readline().rstrip('n')
-        
-        inv = Inventory.Inventory
-        prod = inv(int(prod_id), prod_name, int(prod_qty), float(prod_price))
-        
-        list_products.append(prod)
-        prod_id = inventory_data.readline().rstrip('n')
-    return list_products
-    inventory_data.close()
+    inventory_list = []
+    infile = open('Inventory.txt','r')        
 
+    item_id = infile.readline().rstrip('\n')
+    while item_id != '':
+            
+        name = infile.readline().rstrip('\n')
+        stock = infile.readline().rstrip('\n')
+        price = infile.readline().rstrip('\n')
+        inv = inventory.Inventory
+        item = inv(int(item_id), name, int(stock), float(price))
+        
+        inventory_list.append(item)
+        item_id = infile.readline().rstrip('\n')
+        
+    return inventory_list
 
-def print_inventory(list_products):
-    print('ID \t\tItem \t\t\t\t\t Price \t Stock')
-    for prod in list_products:
-        print(prod)
-    print('Enter 0 when finished. \n')
-   
+def print_inventory(inventory_list):
+    print('ID \t\tItem \t\t\t\t\t\t   Price   Stock')
+    for item in inventory_list:
+        print(item)
+    print('Enter 0 when finished.')
+    print()
     
-def get_item_id(list_products):
-    action = 0
-    while action == 0:
-        id_input = input('Please enter the item ID you wish to purchase/return: ')
+def get_item_id(inventory_list):
+    item_id_validity = False
+    while item_id_validity == False:
+        item_id_input = input('Please input the item id you wish to purchase/return: ')
         try:
-            id_input = int(id_input)
+            item_id_input = int(item_id_input)
         except:
-            print('Input was invalied.')
-        if id_input == 0:
-            action = 1
+            print('Input was invalid.')
+            continue
+        if item_id_input == 0:
+            item_id_validity = True
         else:
-            for prod in list_products:
-                if prod.get_id() == id_input:
-                    action = 1
-            if action == 0:
+            for item in inventory_list:
+                if item.get_item_id() == item_id_input:
+                    item_id_validity = True
+            if item_id_validity == False:
                 print('Input was invalid.')
-    return id_input
+    return item_id_input
 
-
-def updated_inventory(list_products):
-    updated_inv_txt = open('Updated_Inventory.txt', 'w')
-    for prod in list_products:
-        updated_inv_txt.write(str(prod.get_item_id()) + '\n')
-        updated_inv_txt.write(str(prod.get_name()) + '\n')
-        updated_inv_txt.write(str(prod.get_stock()) + '\n')
-        updated_inv_txt.write(str(prod.get_price()) + '\n')
+def write_updated_inventory(inventory_list):
+    updatedtxt = open('UpdatedInventory.txt', 'w')
+    for item in inventory_list:
+        updatedtxt.write(str(item.get_item_id()) + '\n')
+        updatedtxt.write(str(item.get_name()) + '\n')
+        updatedtxt.write(str(item.get_stock()) + '\n')
+        updatedtxt.write(str(item.get_price()) + '\n')
         
-        
-def print_invoice(customer_list):
+def print_invoice(transactional_list):
     item_total = 0
     subtotal = 0
-    
-    for prod in customer_list:
-        item_total = item_total + prod.get_qty()
-        subtotal = subtotal + prod.calc_cost
+    for item in transactional_list:
+        item_total += item.get_qty()
+        subtotal += item.calc_cost()
         
-    if prod != 0:
-        print('\nID \t\t Item \t\t\t\t\t Price \t Stock')
-        for prod in customer_list:
-            print(prod)
-        tax = subtotal * 0.085
+    if item_total != 0:
+        print()
+        print('ID \t\tItem \t\t\t\t\t Qty \t Price \t Total')
+        for item in transactional_list:
+            print(item)
+        tax = subtotal * .085
         total = subtotal + tax
-        print('\nPrice: $' + format(subtotal, '.2f'), sep = '')
-        print('Tax: $' + format(tax, '.2f'), sep = '')
-        print('Total: $' + format(total, '.2f'), sep = '')
+        print('\nPrice: $' + format(subtotal, '.2f'))
+        print('Tax: $' + format(tax, '.2f'))
+        print('Total: $' + format(total, '.2f'))
+    else:
+        print()
         
 def main():
-    list_products = process_inventory()
-    customer_list = []
-    action = 0
-    while action == 0:
-        print_inventory(list_products)
-        id_input = get_item_id(list_products)
-        qty_action = 0
-        if id_input == 0:
-            qty_action = 1
-            action = 1
-        while qty_action == 0:
-            qty_purch = input('Please enter the desired quantity (negative quantity for returns): ')
+    inventory_list = process_inventory()
+    transactional_list = []
+    loop = True
+    while loop == True:
+        print_inventory(inventory_list)
+        item_id_input = get_item_id(inventory_list)
+        qty_validity = False
+        if item_id_input == 0:
+            qty_validity = True
+            loop = False
+            #break
+        while qty_validity == False:
+            qty_input = input('Please enter the desired quantity (negative quantity for returns): ')
             try:
-                qty_purch = int(qty_purch)
-                for prod in list_products:
-                    if prod.get_item_id() == id_input:
-                        if qty_purch > 0:
-                            qty_action = prod.purchase(qty_purch)
-                        else:
-                            qty_action = prod.restock(qty_purch)
-                        if qty_action == 0:
-                            transaction = TransactionItem.TransactionItem
-                            prod_transaction = transaction(prod.get_item_id(), prod.get_name(), qty_purch, prod.get_price())
-                            prod_transaction.get_item_id()
-                            customer_list.append(prod_transaction)
+                qty_input = int(qty_input)
+                for item in inventory_list:
+                    if item.get_item_id() == item_id_input:
+                        if qty_input > 0:
+                            qty_validity = item.purchase(qty_input)
+                        else: 
+                            qty_validity = item.restock(qty_input)
+                        if qty_validity == True:
+                            trans = transactionitem.TransactionItem
+                            new_transaction = trans(item.get_item_id(),
+                                                              item.get_name(),
+                                                              qty_input,
+                                                              item.get_price())
+                            new_transaction.get_item_id()
+                            transactional_list.append(new_transaction)
             except:
-                print('\nSorry, we do not have enough stock.\n')
-                print_inventory(list_products)
-            if qty_action == 1:
-                print('\nSorry, we do not have enough stock.\n')
-                print_inventory(list_products)
-    print_invoice(customer_list)
-    updated_inventory(list_products)
-  
+                print()
+                print('Sorry, we do not have enough stock.')
+                break
+                print_inventory(inventory_list)
+            if qty_validity == False:
+                print()
+                print('Sorry, we do not have enough stock.')
+                break
+                print_inventory(inventory_list)
+        print()
+    print_invoice(transactional_list)
+    write_updated_inventory(inventory_list)
+
 main()
