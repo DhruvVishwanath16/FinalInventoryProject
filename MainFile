@@ -26,7 +26,7 @@ def process_inventory():
 
 
 def print_inventory(list_products):
-    print('ID \t\t Item \t\t\t\t\t Price \t Stock')
+    print('ID \t\tItem \t\t\t\t\t Price \t Stock')
     for prod in list_products:
         print(prod)
     print('Enter 0 when finished. \n')
@@ -44,7 +44,7 @@ def get_item_id(list_products):
             action = 1
         else:
             for prod in list_products:
-                if prod.get_item_id() == id_input:
+                if prod.get_id() == id_input:
                     action = 1
             if action == 0:
                 print('Input was invalid.')
@@ -105,7 +105,10 @@ def main():
                             prod_transaction.get_item_id()
                             customer_list.append(prod_transaction)
             except:
-                print('Sorry, we do not have enough stock.')
+                print('\nSorry, we do not have enough stock.\n')
+                print_inventory(list_products)
+            if qty_action == 1:
+                print('\nSorry, we do not have enough stock.\n')
                 print_inventory(list_products)
     print_invoice(customer_list)
     updated_inventory(list_products)
