@@ -102,10 +102,12 @@ def main():
                             qty_action = prod.purchase(qty_purch)
                         else:
                             qty_action = prod.restock(qty_purch)
+                            
+                        #qty_action == True would mean that the product was succesfully updated with the restock or purchase amount
                         if qty_action == True:
                             transaction = TransactionItem.TransactionItem
                             prod_transaction = transaction(prod.get_id(), prod.get_name(), qty_purch, prod.get_price())
-                            prod_transaction.get_item_id()
+                            prod_transaction.get_id()
                             customer_list.append(prod_transaction)
             except:
                 print('\nSorry, we do not have enough stock.\n')
@@ -117,9 +119,3 @@ def main():
     updated_inventory(list_products)
   
 main()
-            
-                            
-
-
-        
-        
