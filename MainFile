@@ -111,10 +111,10 @@ def main():
                             customer_list.append(prod_transaction)
             except:
                 print('\nSorry, we do not have enough stock.\n')
-                print_inventory(list_products)
+                qty_action = True
             if qty_action == False:
                 print('\nSorry, we do not have enough stock.\n')
-                print_inventory(list_products)
+                qty_action = True
     print_invoice(customer_list)
     updated_inventory(list_products)
   
