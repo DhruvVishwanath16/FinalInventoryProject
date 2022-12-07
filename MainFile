@@ -70,7 +70,7 @@ def print_invoice(customer_list):
         subtotal = subtotal + prod.calc_cost()
         
     if item_total != 0:
-        print('ID \t\tItem \t\t\t\t\t\t\t\t Price \t Stock')
+        print('ID \t\tItem \t\t\t\t\t\tQuantity \tPrice \t Total')
         for prod in customer_list:
             print(prod)
         tax = subtotal * 0.085
