@@ -53,5 +53,5 @@ class TransactionItem:
 # Returns the invoice for the item
     def __str__(self):
         transaction_cost = self.calc_cost()
-        string = str(self.__id) + '\t\t' + str(self.__name) + '  \t\t\t\t\t\t' + str(self.__qty) + ' \t\t\t' + str(self.__price) + '\t' + ' $' + format((transaction_cost), '.2f')
+        string = format(self.__id,'2.0f') + '\t\t' + format(self.__name,'18') + '\t\t' + format(self.__qty,'8.0f') + '\t\t' + format(self.__price, '8.2f') + '\t' + ' $' + format((transaction_cost), '6.2f')
         return string
