@@ -3,7 +3,7 @@
 #Date: 11/28/22
 #Program Description: Inventory class for final project
 
-
+# Initializes the variables for the class
 class Inventory:
     def __init__(self, new_id, new_name, new_stock, new_price):
         self.__id = new_id
@@ -40,10 +40,6 @@ class Inventory:
         else:
             return False
     
-        
+# This returns the information for the inventory of each item in the store
     def __str__(self):
         return format(self.__id, '<5.0f') + '\t' + format(self.__name, '<20') + '\t\t\t\t ' + format(self.__price, '.2f') + '\t  ' + str(format(self.__stock, '.1f'))
-        
-    
-
-
