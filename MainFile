@@ -3,10 +3,11 @@
 #Date: 11/28/22
 #Program Description: Main file for final project
 
+# Importing of the two classes that are used in the file
 import TransactionItem
 import Inventory
 
-
+# This function reads the inventory file creates the list of the products that are available at the store
 def process_inventory():
     inventory_data = open('Inventory.txt','r')
     prod_id = inventory_data.readline().rstrip('\n')
@@ -24,14 +25,15 @@ def process_inventory():
     return list_products
     inventory_data.close()
 
-
+# This function prints out the heading for the inventory of the list of products
 def print_inventory(list_products):
     print('ID \t\tItem \t\t\t\t\t\t\t\t Price \t Stock')
     for prod in list_products:
         print(prod)
     print('\nEnter 0 when finished. \n')
    
-    
+# This function receives an input for the id of the item the customer wants and finds it from the
+# initial inventory file
 def get_item_id(list_products):
     action = 0
     while action == 0:
@@ -51,7 +53,7 @@ def get_item_id(list_products):
                 print('Input was invalid.')
     return id_input
 
-
+# This function creates a new file of the updated inventory after the customer makes their transaction
 def updated_inventory(list_products):
     updated_inv_txt = open('Updated_Inventory.txt', 'w')
     for prod in list_products:
@@ -60,7 +62,7 @@ def updated_inventory(list_products):
         updated_inv_txt.write(str(prod.get_stock()) + '\n')
         updated_inv_txt.write(str(prod.get_price()) + '\n')
         
-        
+# This function is able to print the invoice of the purchase or return the customer asks for    
 def print_invoice(customer_list):
     item_total = 0
     subtotal = 0
@@ -80,7 +82,8 @@ def print_invoice(customer_list):
         print('Total: $' + format(total, '.2f'), sep = '')
     else:
         print('Error in printing invoice. Please try again.')
-        
+       
+# Main function that calls the prior functions and the classes to create the inventory and the invoice
 def main():
     list_products = process_inventory()
     customer_list = []
@@ -118,4 +121,5 @@ def main():
     print_invoice(customer_list)
     updated_inventory(list_products)
   
+# Calls the main function to be executed
 main()
